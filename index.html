@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3efe4">
+    <title data-i18n="ui.text.pageTitle">taskimatic — private +@$&lt; management | No Sign-Up Required</title>
+    <meta name="description" content="private task and time management with zero sign-up. 100% local browser storage (OPFS or IndexedDB), offline-ready, with no cloud tracking or accounts.">
+    <link rel="canonical" href="https://taskimatic.com/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://taskimatic.com/">
+    <meta property="og:site_name" content="taskimatic">
+    <meta property="og:title" content="taskimatic — private +@$< management | No Sign-Up Required">
+    <meta property="og:description" content="Manage tasks, plans, and track time with 100% local browser storage. No accounts, no subscriptions, zero cloud tracking.">
+    <meta property="og:image" content="https://taskimatic.com/android-icon-144x144.png">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="taskimatic — private +@$< management | No Sign-Up Required">
+    <meta name="twitter:description" content="A private, local-first task and time management with no login or cloud required. Works 100% offline.">
+    <meta name="twitter:image" content="https://taskimatic.com/android-icon-144x144.png">
+
+    <!-- Favicons & Web App Manifest -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="./tasks.webmanifest">
+
+    <script src="./js/i18n.js" data-taskimatic-i18n-service></script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "taskimatic",
+      "headline": "taskimatic — private task & time management | No Sign-Up Required",
+      "url": "https://taskimatic.com/",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript and IndexedDB support",
+      "description": "A free, local-first AI enabled task manager and time management that stores 100% of data locally in your browser with zero login required.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "No login or account required",
+        "100% local browser storage (OPFS or IndexedDB)",
+        "Works offline",
+        "Time tracking and task planning",
+        "Portable JSON export and import",
+        "Zero telemetry or cloud tracking",
+        "AI enabled task management",
+        "Privacy-focused and secure",
+        "WebRTC peer-to-peer synchronization"
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="./css/tasks.css" data-taskimatic-style>
+    <link rel="stylesheet" href="./css/protect-modal.css" id="protect-modal-styles" data-taskimatic-style>
+</head>
+<body>
+    <div class="workspace-location-tabs">
+        <div class="workspace-tab-list" role="tablist" aria-label="Workspace location" data-i18n-aria-label="ui.text.workspaceLocation">
+            <button type="button" class="workspace-tab" id="cloud-tab" role="tab" aria-controls="cloud-panel" aria-selected="true"><span data-i18n="ui.text.cloud">Cloud</span></button>
+            <button type="button" class="workspace-tab" id="land-tab" role="tab" aria-controls="land-panel" aria-selected="false" tabindex="-1"><span data-i18n="ui.text.land">Land</span></button>
+        </div>
+        <div id="cloud-panel" role="tabpanel" aria-labelledby="cloud-tab">
+            <header class="sr-only">
+                <h1 data-i18n="ui.text.pageHeading">taskimatic — private +@$&lt; management (No Sign-Up Required)</h1>
+                <p><span data-i18n="ui.text.a100LocalFirstPrivacyFocusedTaskManagerPlannerAndTimeLedgerThatRunsDirectlyInYourBrow">A 100% local-first, privacy-focused task manager, planner, and time ledger that runs directly in your browser using local browser storage. No login, no cloud sync, and zero tracking.</span></p>
+            </header>
+            <noscript>
+                <div style="padding: 24px; text-align: center; background: #fffdf7; border: 1px solid #cfc8b8; margin: 20px; border-radius: 12px; font-family: sans-serif;">
+                    <h2>JavaScript Required for Local Storage</h2>
+                    <p>Taskimatic is a 100% local, client-side task management that runs entirely in your browser using local browser storage with no accounts or servers.
+                       You can get the benefits of AI agent powered task management right in your browser with MCP-powered features, which are available offline as well.
+                       WebRTC peer-to-peer synchronization is also available. Please enable JavaScript to use the app.</p>
+                </div>
+            </noscript>
+            <task-workspace></task-workspace>
+        </div>
+        <div class="land-panel" id="land-panel" role="tabpanel" aria-labelledby="land-tab" tabindex="0" hidden>
+            <section class="land-message">
+                <h2><span data-i18n="ui.text.comingSoonAServerOnALocalMachineNearYou">Coming Soon: A server on a local machine near you.</span></h2>
+                <p><span data-i18n="ui.text.taskimaticWillSoonGiveYouAWayToSecurelyConnectYourLocalMachineToOurServiceSoYouGetAll">Taskimatic will soon give you a way to securely connect your local machine to our service so you get all the benefits of AI-powered task management and peer-to-peer collaboration while you keep privacy and control over your data.</span></p>
+            </section>
+        </div>
+    </div>
+
+    <!-- A downloaded copy stores its portable task snapshot here. -->
+    <script type="application/json" id="taskimatic-seed">[]</script>
+
+    <script src="./js/workspace-tabs.js"></script>
+
+    <script src="./js/offline.js" data-taskimatic-offline></script>
+    <script type="module" src="./js/tasks-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "defaultLang": "en",
+  "languages": {
+    "en": {
+      "Lang": "English",
+      "file": "./data/i18n/en.json"
+    },
+    "zh": {
+      "Lang": "简体中文",
+      "file": "./data/i18n/zh.json"
+    },
+    "es": {
+      "Lang": "Español",
+      "file": "./data/i18n/es.json"
+    },
+    "hi": {
+      "Lang": "हिन्दी",
+      "file": "./data/i18n/hi.json"
+    },
+    "pt": {
+      "Lang": "Português",
+      "file": "./data/i18n/pt.json"
+    },
+    "ja": {
+      "Lang": "日本語",
+      "file": "./data/i18n/ja.json"
+    },
+    "de": {
+      "Lang": "Deutsch",
+      "file": "./data/i18n/de.json"
+    },
+    "fr": {
+      "Lang": "Français",
+      "file": "./data/i18n/fr.json"
+    },
+    "ko": {
+      "Lang": "한국어",
+      "file": "./data/i18n/ko.json"
+    },
+    "it": {
+      "Lang": "Italiano",
+      "file": "./data/i18n/it.json"
+    },
+    "ru": {
+      "Lang": "Русский",
+      "file": "./data/i18n/ru.json"
+    },
+    "id": {
+      "Lang": "Bahasa Indonesia",
+      "file": "./data/i18n/id.json"
+    },
+    "uk": {
+      "Lang": "Українська",
+      "file": "./data/i18n/uk.json"
+    },
+    "tr": {
+      "Lang": "Türkçe",
+      "file": "./data/i18n/tr.json"
+    },
+    "nl": {
+      "Lang": "Nederlands",
+      "file": "./data/i18n/nl.json"
+    }
+  },
+  "fixup": {
+    "zh-cn": "zh",
+    "zh-sg": "zh",
+    "zh-hans": "zh",
+    "hi-in": "hi",
+    "pt-br": "pt",
+    "pt-pt": "pt",
+    "ja-jp": "ja",
+    "de-de": "de",
+    "de-at": "de",
+    "de-ch": "de",
+    "fr-fr": "fr",
+    "fr-ca": "fr",
+    "fr-be": "fr",
+    "fr-ch": "fr",
+    "ko-kr": "ko",
+    "it-it": "it",
+    "it-ch": "it",
+    "ru-ru": "ru",
+    "id-id": "id",
+    "uk-ua": "uk",
+    "tr-tr": "tr",
+    "nl-nl": "nl",
+    "nl-be": "nl"
+  }
+}

@@ -1,0 +1,22 @@
+import { installBackupTracker } from '../webcomp/backuptracker.js';
+import { installSearcherElement } from '../webcomp/searcher-element.js';
+import { installSessionTimes } from '../webcomp/session-times.js';
+import { installLockInControls } from '../webcomp/lock-in-controls.js';
+import { formatDuration } from './task-model.js';
+import { installTaskimaticAPI } from './task-api.js';
+import '../webcomp/dual-range-slider.js';
+import '../webcomp/task-sort-controls.js';
+import '../webcomp/task-item.js';
+import '../webcomp/task-table.js';
+import '../webcomp/task-hierarchy-editor.js';
+import '../webcomp/task-visualization.js';
+import '../webcomp/planning-item.js';
+import { TaskWorkspace } from '../webcomp/task-workspace.js';
+
+await window.i18n.ready;
+installLockInControls();
+installSearcherElement();
+installSessionTimes(formatDuration);
+installBackupTracker();
+customElements.define('task-workspace', TaskWorkspace);
+installTaskimaticAPI();

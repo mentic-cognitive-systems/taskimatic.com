@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live SVG Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 20px;
+    }
+    .svg-container {
+      width: 500px;
+      height: 500px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+    .svg-container svg {
+      width: 100%;
+      height: 100%;
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .toolbar button {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    #error-message {
+      color: #b00020;
+      margin-top: 10px;
+      min-height: 1.2em;
+    }
+    #color-picker-popover {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #999;
+      border-radius: 6px;
+      padding: 8px 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Live SVG Editor</h1>
+
+  <!-- SVG Display Container -->
+  <div class="svg-container" id="svg-container"></div>
+
+  <div id="error-message" role="alert"></div>
+
+  <!-- Upload / Download controls -->
+  <div class="toolbar">
+    <button id="upload-btn" type="button">Upload SVG</button>
+    <button id="download-btn" type="button">Download SVG</button>
+    <input type="file" id="file-input" accept=".svg,image/svg+xml" hidden>
+  </div>
+
+  <!-- Floating color picker for clicked shapes -->
+  <div id="color-picker-popover" hidden>
+    <label>Color: <input type="color" id="color-picker"></label>
+  </div>
+
+  <!-- Textarea for SVG Code Editing -->
+  <textarea id="svg-textarea" spellcheck="false"></textarea>
+
+  <script>
+    // Initial SVG markup
+    const initialSVG = `
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <rect x="52" y="52" width="396" height="396" rx="47.5" ry="47.5" style="fill: rgb(208, 14, 0); stroke: rgb(208, 14, 0);"></rect>
+        <text x="30" y="30" transform="matrix(10, 0, 0, 22.4, -230, -320)" style="font-size: 14px; fill: rgb(255, 255, 255);">+@\${</text>
+      </svg>
+    `;
+
+    // Elements
+    const svgContainer = document.getElementById('svg-container');
+    const svgTextarea = document.getElementById('svg-textarea');
+    const errorMessage = document.getElementById('error-message');
+    const uploadBtn = document.getElementById('upload-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const fileInput = document.getElementById('file-input');
+    const popover = document.getElementById('color-picker-popover');
+    const colorPicker = document.getElementById('color-picker');
+    let colorTarget = null;
+    let colorProp = 'fill';
+
+    // Function to load SVG from text area
+    function loadSVG() {
+      popover.hidden = true;
+      colorTarget = null;
+      const code = svgTextarea.value;
+      // Validate as XML first so we can surface parse errors
+      const doc = new DOMParser().parseFromString(code, 'image/svg+xml');
+      const parseError = doc.querySelector('parsererror');
+      if (parseError) {
+        errorMessage.textContent = 'Invalid SVG: ' + parseError.textContent.split('\n')[0];
+        return; // keep the last good render
+      }
+      errorMessage.textContent = '';
+      svgContainer.innerHTML = code;
+    }
+
+    // Load initial SVG
+    svgTextarea.value = initialSVG;
+    loadSVG();
+
+    // Re-render the SVG whenever the text changes
+    svgTextarea.addEventListener('input', loadSVG);
+
+    // Upload an SVG file into the editor
+    uploadBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        svgTextarea.value = reader.result;
+        loadSVG();
+      };
+      reader.readAsText(file);
+      fileInput.value = ''; // allow re-selecting the same file
+    });
+
+    // Download the current SVG markup as a file
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([svgTextarea.value], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'image.svg';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Convert a computed CSS color (e.g. "rgb(208, 14, 0)") to "#rrggbb"
+    function rgbToHex(color) {
+      const m = color.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+      if (!m) return '#000000';
+      return '#' + [m[1], m[2], m[3]]
+        .map(n => Number(n).toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    // Show a color picker when a colored part of the image is clicked/tapped
+    svgContainer.addEventListener('click', (e) => {
+      const el = e.target;
+      colorTarget = null;
+      popover.hidden = true;
+      if (!(el instanceof SVGElement) || el.tagName.toLowerCase() === 'svg') return;
+
+      // Prefer fill, fall back to stroke
+      const style = getComputedStyle(el);
+      let color = style.fill;
+      colorProp = 'fill';
+      if (!color || color === 'none' || color === 'transparent' || color.startsWith('url(')) {
+        color = style.stroke;
+        colorProp = 'stroke';
+      }
+      if (!color || color === 'none' || color === 'transparent' || color.startsWith('url(')) return;
+
+      colorTarget = el;
+      colorPicker.value = rgbToHex(color);
+      popover.style.left = e.pageX + 'px';
+      popover.style.top = e.pageY + 'px';
+      popover.hidden = false;
+    });
+
+    // Apply the chosen color and sync the markup back to the textarea
+    colorPicker.addEventListener('input', () => {
+      if (!colorTarget) return;
+      colorTarget.style[colorProp] = colorPicker.value;
+      svgTextarea.value = svgContainer.innerHTML;
+    });
+
+    // Hide the picker when clicking outside the image and the picker
+    document.addEventListener('click', (e) => {
+      if (!popover.hidden && !popover.contains(e.target) && !svgContainer.contains(e.target)) {
+        popover.hidden = true;
+        colorTarget = null;
+      }
+    });
+  </script>
+
+</body>
+</html>

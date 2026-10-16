@@ -1,0 +1,12 @@
+{
+    "name": "Taskimatic — Tasks & Time Tracker",
+    "short_name": "Taskimatic",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "theme_color": "#f3efe4",
+    "background_color": "#f3efe4",
+    "icons": [
+        { "src": "./android-icon-192x192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "./android-icon-512x512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}
